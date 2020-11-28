@@ -96,7 +96,7 @@ class Client(pypresence.Presence):
             print(colored("  done!", "green"))
 
             print(colored("Reverting to old configuration...", "yellow"))
-            open("config.py", "w").write(json.dumps(config, indent = self.config["indentSize"]))
+            open("config.py", "w").write(config)
             print(colored("  done!", "green"))
 
             print(colored("Installing dependencies (requirements.txt)...", "yellow"))
