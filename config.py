@@ -26,6 +26,18 @@ configuration = {
         "RobloxPlayerBeta": {
             "text": "Playing a game",
             "longName": "Roblox Player"
+        },
+        "Twitch": {
+            "text": "Watching a stream",
+            "longName": "Twitch"
+        },
+        "MinecraftLauncher": {
+            "text": "Playing Minecraft",
+            "longName": "Minecraft"
+        },
+        "msedge": {
+            "text": "Browsing the web",
+            "longName": "Microsoft Edge"
         }
     },
     "hoverText": "Ben's Custom Status",  # The text that shows when you hover over the image

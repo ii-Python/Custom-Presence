@@ -71,7 +71,7 @@ class Client(pypresence.Presence):
 
             print(colored("So, you want to setup a new application for the status changer.", "green"))
             print(colored("In short, it should follow the following syntax:", "green"))
-            print(colored(dumps({"APPEXE_NAME": {"text": "Small Text", "longName": "Full Application Name"}}, indent = 4), "yellow"))
+            print(colored(json.dumps({"APPEXE_NAME": {"text": "Small Text", "longName": "Full Application Name"}}, indent = 4), "yellow"))
             print()
             print(colored("For the APPEXE_NAME, you should choose the one you want from the list (make sure the app you want is running):", "green"))
             print(colored("".join(p + ", " for p in running)[:-2], "yellow"))

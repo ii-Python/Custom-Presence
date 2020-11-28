@@ -12,6 +12,7 @@ except ImportError:
 
 # Initialization
 rpc = presence.RPC.Client(config, presence, config["app_id"])
+rpc.init()
 
 # Main loop
 while True:
