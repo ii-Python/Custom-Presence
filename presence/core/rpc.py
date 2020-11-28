@@ -6,14 +6,15 @@ import time
 import json
 
 import psutil
-import random
-
 import colorama
+
+import win32gui
 import pypresence
 
+import win32process
 from ..colors import colored
-from .hash import generate_key
 
+from .hash import generate_key
 from ..logging import crash, info
 
 # Client class
@@ -82,21 +83,14 @@ class Client(pypresence.Presence):
 
     def get_app(self):
 
-        running = []
+        pid = win32process.GetWindowThreadProcessId(win32gui.GetForegroundWindow())
+        process = psutil.Process(pid[-1])
 
-        for program in psutil.process_iter():
-
-            name = program.name().replace(".exe", "")
-            if name in running: continue
-
-            if name in self.config["applications"]:
-                running.append(name)
-
-        if not running:
+        name = process.name().replace(".exe", "")
+        if name is None:
             return None
 
-        app = random.choice(running) if self.config["forceApp"] is None else self.config["forceApp"]
-        return app
+        return name if self.config["forceApp"] is None else self.config["forceApp"]
 
     def kill(self):
 
@@ -113,6 +107,9 @@ class Client(pypresence.Presence):
         exit()
 
     def wait(self, extraDelay: int = 0):
+
+        if self.config["updateTime"] < 15:
+            crash("updateTime needs to be at least a 15 second interval!")
 
         try: time.sleep(self.config["updateTime"] + extraDelay)
         except KeyboardInterrupt: self.kill()
