@@ -34,7 +34,7 @@ configuration = {
     "smallImage": "goose",  # The image to use as a small icon
     "secretLib": hashlib.sha256,  # The hash function to use for generating secrets (use sha526 if you don't know what this does)
     "maxJoinSize": 6,  # The maximum amount of people that can join your "activity"
-    "allowJoining": False  # Whether to display a "Join" button on your status or not
+    "allowJoining": True  # Whether to display a "Join" button on your status or not
 }
 
 class Config:
