@@ -19,6 +19,7 @@ Once installed, you can launch the presence with `python main.py`.
 ---
 
 You can use `config.py` to setup custom programs, change refresh times, etc.
+
 For a small example of adding a custom program to it, run `python main.py --setup` for instructions.
 
 
@@ -29,5 +30,5 @@ main.py [options]
 ```
 
 Provided is a list of available options:
-  `--show-keys`, which prints the join and party key
-  `--hide-rpc-dump`, which hides the "RPC information dumped" message
+  - `--show-keys`, which prints the join and party key
+  - `--hide-rpc-dump`, which hides the "RPC information dumped" message
