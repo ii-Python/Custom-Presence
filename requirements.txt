@@ -1,4 +1,3 @@
 psutil
 colorama
 pypresence
-python-dotenv
