@@ -11,8 +11,8 @@ except ImportError:
     presence.crash("Something went wrong while loading the configuration. Please consult the documentation.")
 
 # Initialization
-rpc.init()
 rpc = presence.RPC.Client(config, presence, config["app_id"])
+rpc.init()
 
 # Main loop
 while True:
