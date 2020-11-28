@@ -31,7 +31,7 @@ main.py [options]
 
 Provided is a list of available options:
   - `--show-keys`, which prints the join and party key
-  - `--hide-rpc-dump`, which hides the "RPC information dumped" message
+  - `--show-rpc-dump`, which shows when the script dumps to `rpc.json`
 
 ### Troubleshooting
 ---

@@ -153,5 +153,5 @@ class Client(pypresence.Presence):
             self.kill()
 
         open("rpc.json", "w+").write(json.dumps(r, indent = self.config["indentSize"]))
-        if "--hide-rpc-dump" not in sys.argv: 
+        if "--show-rpc-dump" in sys.argv: 
             info(colored(f"RPC information dumped to rpc.json (refreshing in {self.config['updateTime']} seconds(s))", "green"))
