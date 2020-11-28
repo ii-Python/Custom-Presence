@@ -22,6 +22,10 @@ class Client(pypresence.Presence):
     def __init__(self, config, host, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
+        info(colored(host.__copyright__, "blue"))
+        info(colored(f"Running RPC v{host.__version__}", "blue"))
+        print()
+
         self.config = config
 
         try:
@@ -31,23 +35,23 @@ class Client(pypresence.Presence):
             crash("The secretLib used is not valid in the context required. Please check the documentation.")
 
         try:
+            info(colored("Starting Custom Presence...", "green"))
             self.connect()
         except pypresence.exceptions.InvalidPipe:
             crash("Discord is not running!")
 
         # Information
-        info(colored("The status changer has been started.", "blue"))
-        info(colored("Press CTRL+C at any time to stop it.", "blue"))
-        info(colored("Thanks for using it! :D", "blue"))
-
-        print()
-        info(colored(host.__copyright__, "blue"))
-        info(colored(f"Running RPC v{host.__version__}", "blue"))
         print()
 
-        info(colored("Keys generated (don't share these!):", "yellow"))
-        info(colored(f"  Join key: {self.join_key}", "yellow"))
-        info(colored(f"  Party ID: {self.party_id}", "yellow"))
+        info(colored("The status changer has been started; press CTRL+C at any time to stop it.", "blue"))
+        info(colored("Thanks for using Custom Presence, feel free to support the project! :D", "blue"))
+
+        print()
+
+        if "--show-keys" in sys.argv:
+            info(colored("Keys generated (don't share these!):", "yellow"))
+            info(colored(f"  Join key: {self.join_key}", "yellow"))
+            info(colored(f"  Party ID: {self.party_id}", "yellow"))
 
     def init(self):
 
@@ -149,4 +153,5 @@ class Client(pypresence.Presence):
             self.kill()
 
         open("rpc.json", "w+").write(json.dumps(r, indent = self.config["indentSize"]))
-        info(colored(f"RPC information dumped to rpc.json (refreshing in {self.config['updateTime']} seconds(s))", "green"))
+        if "--hide-rpc-dump" not in sys.argv: 
+            info(colored(f"RPC information dumped to rpc.json (refreshing in {self.config['updateTime']} seconds(s))", "green"))
