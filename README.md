@@ -48,3 +48,6 @@ Provided is a list of available options:
 
 "secretLib needs to be set in order to use this":
   - Make sure that `secretLib` is not set to `None`.
+
+"updateTime needs to be at least a 15 second interval":
+  - Set `updateTime` to a value bigger than (or equal to) 15 (the required RPC delay).
