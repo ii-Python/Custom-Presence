@@ -27,6 +27,13 @@ class Client(pypresence.Presence):
         print()
 
         self.config = config
+        self.websites = {
+            "YouTube": {
+                "icon_name": "youtube",
+                "name": "Watching YouTube",
+                "text": "{}"
+            }
+        }
 
         try:
             self.join_key = generate_key(self.config)
@@ -68,16 +75,9 @@ class Client(pypresence.Presence):
             website = website.rsplit(" - ")[-1]
 
         # Rich presence
-        websites = {
-            "YouTube": {
-                "icon_name": "youtube",
-                "name": "Watching YouTube",
-                "text": "{}"
-            }
-        }
-        if website in websites:
+        if website in self.websites:
 
-            website = websites[website]
+            website = self.websites[website]
             text = website["text"].format(page)
             if text != "":
 
@@ -149,8 +149,11 @@ class Client(pypresence.Presence):
 
         app = win32gui.GetForegroundWindow()
 
-        pid = win32process.GetWindowThreadProcessId(app)
-        process = psutil.Process(pid[-1])
+        try:
+            pid = win32process.GetWindowThreadProcessId(app)
+            process = psutil.Process(pid[-1])
+        except psutil.NoSuchProcess:
+            return None  # Callback for when a process is quickly closed or for the desktop sometimes
 
         name = process.name().replace(".exe", "")
         if name is None:
