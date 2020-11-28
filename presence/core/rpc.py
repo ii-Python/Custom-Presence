@@ -53,6 +53,43 @@ class Client(pypresence.Presence):
             info(colored(f"  Join key: {self.join_key}", "yellow"))
             info(colored(f"  Party ID: {self.party_id}", "yellow"))
 
+    def _rich_google_status(self, title):
+
+        app = "chrome"
+        data = self.config["applications"]["chrome"]
+
+        website = "".join(piece + " - " for piece in title.split(" - ")[:-1])[:-3]
+        page = ""
+
+        if " - " in website:
+            cut = website.rsplit(" - ")
+
+            page = "".join(piece + " - " for piece in cut[:-1])[:-3]
+            website = website.rsplit(" - ")[-1]
+
+        # Rich presence
+        websites = {
+            "YouTube": {
+                "icon_name": "youtube",
+                "name": "Watching YouTube",
+                "text": "{}"
+            }
+        }
+        if website in websites:
+
+            website = websites[website]
+            text = website["text"].format(page)
+            if text != "":
+
+                app = website["icon_name"]
+
+                data = {
+                    "text": text,
+                    "longName": website["name"]
+                }
+
+        return (app, data)
+
     def init(self):
 
         # Help command
@@ -110,14 +147,17 @@ class Client(pypresence.Presence):
 
     def get_app(self):
 
-        pid = win32process.GetWindowThreadProcessId(win32gui.GetForegroundWindow())
+        app = win32gui.GetForegroundWindow()
+
+        pid = win32process.GetWindowThreadProcessId(app)
         process = psutil.Process(pid[-1])
 
         name = process.name().replace(".exe", "")
         if name is None:
             return None
 
-        return name if self.config["forceApp"] is None else self.config["forceApp"]
+        name = name if self.config["forceApp"] is None else self.config["forceApp"]
+        return (name, win32gui.GetWindowText(app))
 
     def kill(self):
 
@@ -143,10 +183,19 @@ class Client(pypresence.Presence):
 
     def set_presence(self, app):
 
+        name = app[0]
+        title = app[1]
+
+        app = name
+
         if app is None or not app in self.config["applications"]:
             return info(colored("No applications in the database currently running (skipping turn)", "red"))
 
         data = self.config["applications"][app]
+
+        # Google chrome rich status
+        if app == "chrome":
+            (app, data) = self._rich_google_status(title)
 
         # Update our presence
         lobby = {}
