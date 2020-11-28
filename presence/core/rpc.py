@@ -6,15 +6,14 @@ import time
 import json
 
 import psutil
-import colorama
-
 import win32gui
+
 import pypresence
-
 import win32process
-from ..colors import colored
 
+from ..colors import colored
 from .hash import generate_key
+
 from ..logging import crash, info
 
 # Client class
@@ -56,9 +55,6 @@ class Client(pypresence.Presence):
 
     def init(self):
 
-        # Initialize colorama
-        colorama.init()
-
         # Help command
         if "--setup" in sys.argv:
 
@@ -79,6 +75,37 @@ class Client(pypresence.Presence):
             print()
             print(colored(f"This is important! Make sure you go to https://discord.com/developers/applications/{self.config['app_id']}/rich-presence/assets", "green"))
             print(colored("and make sure you upload an image for your application. Its name must be the all-lowercase form of APPEXE_NAME.", "green"))
+            exit()
+
+        # Update script
+        if "--update" in sys.argv:
+
+            print(colored("Custom Presence - Automatic Update Script", "yellow"))
+            print()
+
+            print(colored("Saving config file to memory...", "yellow"))
+            config = open("config.py", "r").read()
+            print(colored("  saved!", "green"))
+
+            print(colored("Stashing stages...", "yellow"))
+            os.system("git stash")
+            print(colored("  done!", "green"))
+
+            print(colored("Cloning update (using origin remote)...", "yellow"))
+            os.system("git pull origin master")
+            print(colored("  done!", "green"))
+
+            print(colored("Reverting to old configuration...", "yellow"))
+            open("config.py", "w").write(json.dumps(config, indent = self.config["indentSize"]))
+            print(colored("  done!", "green"))
+
+            print(colored("Installing dependencies (requirements.txt)...", "yellow"))
+            os.system("python -m pip install -r requirements.txt")
+            print(colored("  done!", "green"))
+
+            print()
+
+            print(colored("Update has been completed!", "green"))
             exit()
 
     def get_app(self):
@@ -116,7 +143,7 @@ class Client(pypresence.Presence):
 
     def set_presence(self, app):
 
-        if app is None:
+        if app is None or not app in self.config["applications"]:
             return info(colored("No applications in the database currently running (skipping turn)", "red"))
 
         data = self.config["applications"][app]

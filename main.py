@@ -3,12 +3,16 @@
 
 # Modules
 import presence
+import colorama
 
 try:
     from config import Config
     config = Config()
 except ImportError:
     presence.crash("Something went wrong while loading the configuration. Please consult the documentation.")
+
+# Initialize colorama
+colorama.init()
 
 # Initialization
 rpc = presence.RPC.Client(config, presence, config["app_id"])
