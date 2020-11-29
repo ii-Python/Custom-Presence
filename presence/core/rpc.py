@@ -32,6 +32,11 @@ class Client(pypresence.Presence):
                 "icon_name": "youtube",
                 "name": "Watching YouTube",
                 "text": "{}"
+            },
+            "Watch on Crunchyroll": {
+                "icon_name": "crunchyroll",
+                "name": "Watching Anime",
+                "text": "{}"
             }
         }
 
@@ -216,7 +221,7 @@ class Client(pypresence.Presence):
                 details = data["longName"],
                 state = data["text"],
                 # Images
-                large_image = app.lower(),
+                large_image = app.lower().replace(" ", ""),
                 large_text = data["longName"],
                 small_image = self.config["smallImage"],
                 small_text = self.config["hoverText"],

@@ -38,6 +38,14 @@ configuration = {
         "msedge": {
             "text": "Browsing the web",
             "longName": "Microsoft Edge"
+        },
+        "steam": {
+            "text": "Exploring steam",
+            "longName": "Steam"
+        },
+        "Among Us": {
+            "text": "Playing in a round",
+            "longName": "Among Us"
         }
     },
     "hoverText": "Ben's Custom Status",  # The text that shows when you hover over the image
