@@ -1,4 +1,5 @@
 # Modules
+import sys
 from .colors import colored
 from datetime import datetime
 
@@ -12,3 +13,10 @@ def crash(m):
 
     info(colored(m, "red"))
     exit()
+
+def verbose(*args):
+
+    if "-v" not in sys.argv: return
+
+    time = datetime.now().strftime("%D %I:%M:%S %p")
+    print(colored(f"[{time} (VERBOSE)]:", "yellow"), *args)

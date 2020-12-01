@@ -15,7 +15,7 @@ from random import choice
 from ..colors import colored
 
 from .hash import generate_key
-from ..logging import crash, info
+from ..logging import crash, info, verbose
 
 # Client class
 class Client(pypresence.Presence):
@@ -41,6 +41,7 @@ class Client(pypresence.Presence):
                 "name": "Watching Anime",
                 "text": "{}"
             }
+            # todo: add pornhub support? ;)
         }
 
         try:
@@ -171,18 +172,32 @@ class Client(pypresence.Presence):
             print(colored("Update has been completed!", "green"))
             exit()
 
+    def get_bg_apps(self):
+
+        running = []
+        for program in psutil.process_iter():
+            name = program.name().replace(".exe", "")
+            if name in running: continue
+            if name in self.config["applications"]:
+                running.append(name)
+
+        return running
+
     def get_app(self):
 
         app = win32gui.GetForegroundWindow()
+        verbose("Located app", app, "as the foreground window.")
 
         try:
             pid = win32process.GetWindowThreadProcessId(app)
             process = psutil.Process(pid[-1])
-        except psutil.NoSuchProcess:
+        except psutil.NoSuchProcess as err:
+            verbose("Failed to fetch process info for", app, "with", err)
             return None  # Callback for when a process is quickly closed or for the desktop sometimes
 
         name = process.name().replace(".exe", "")
         if name is None:
+            verbose("For some reason no app name was received.")
             return None
 
         name = name if self.config["forceApp"] is None else self.config["forceApp"]
@@ -192,18 +207,34 @@ class Client(pypresence.Presence):
             if name in self.config["applications"]:
                 _ = self.config["applications"][name]
                 if _["weight"] == 0:
+
                     # Prefer to seek out a background task
+                    verbose("Searching for tasks with a higher weight then 1...")
+
+                    rn = self.get_bg_apps()
                     running = []
-                    for program in psutil.process_iter():
-                        name = program.name().replace(".exe", "")
-                        if name in running: continue
-                        if name in self.config["applications"] and self.config["applications"][name]["weight"] > 0:
-                            running.append(name)
+                    for _rn in rn:
+                        if self.config["applications"][_rn]["weight"] > 0:
+                            verbose(" ", "found app", _rn, "with weight of", self.config["applications"][_rn]["weight"])
+                            running.append(_rn)
 
                     if running:
                         name = choice(running)
+                        verbose("Chose", name, "as the weighted background app!")
                         if not self.prev_app or self.prev_app != name:
                             info(colored(f"The {name} application is running and will override other applications.", "green"))
+
+        # This really isn't a valid app, seek out something else
+        if not name in self.config["applications"]:
+            apps = self.get_bg_apps()
+            if apps:
+
+                # We are able to set the name since chrome is the only
+                # app that depends on GetWindowText, instead of others.
+
+                # By default chrome would have a weight higher than 0 to
+                # prevent issues, if not file a bug report.
+                name = choice(apps)
 
         return (name, win32gui.GetWindowText(app))
 
