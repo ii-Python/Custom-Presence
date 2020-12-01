@@ -12,9 +12,9 @@ import pypresence
 import win32process
 
 from random import choice
-from ..colors import colored
-
 from .hash import generate_key
+
+from ..colors import colored, clear
 from ..logging import crash, info, verbose
 
 # Client class
@@ -22,6 +22,8 @@ class Client(pypresence.Presence):
 
     def __init__(self, config, host, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        clear()  # Nice effect, right?
 
         info(colored(host.__copyright__, "blue"))
         info(colored(f"Running RPC v{host.__version__}", "blue"))
@@ -40,8 +42,13 @@ class Client(pypresence.Presence):
                 "icon_name": "crunchyroll",
                 "name": "Watching Anime",
                 "text": "{}"
+            },
+            # Kinky shit
+            "Pornhub.com": {
+                "icon_name": "ph",
+                "name": "😉",
+                "text": "I-"
             }
-            # todo: add pornhub support? ;)
         }
 
         try:
@@ -191,7 +198,7 @@ class Client(pypresence.Presence):
         try:
             pid = win32process.GetWindowThreadProcessId(app)
             process = psutil.Process(pid[-1])
-        except psutil.NoSuchProcess as err:
+        except [psutil.NoSuchProcess, ValueError] as err:
             verbose("Failed to fetch process info for", app, "with", err)
             return None  # Callback for when a process is quickly closed or for the desktop sometimes
 
