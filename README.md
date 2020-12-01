@@ -1,6 +1,6 @@
 # Custom Presence
 ### a small RPC presence program designed for customizability
-[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org)
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org) [![GitHub license](https://img.shields.io/github/license/ii-Python/Custom-Presence.svg)](https://github.com/ii-Python/Custom-Presence/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/ii-Python/Custom-Presence.svg)](https://github.com/ii-Python/Custom-Presence/releases/) [![Only 9 Kb](https://badge-size.herokuapp.com/ii-Python/Custom-Presence/master/presence/core/rpc.py)](https://github.com/ii-Python/Custom-Presence/blob/master/presence/core/rpc.py) [![Open Source? Yes!](https://badgen.net/badge/Open%20Source%20%3F/Yes%21/blue?icon=github)](https://github.com/ii-Python/Custom-Presence) [![Discord](https://img.shields.io/discord/783364354040528916.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/dHMjBRbwhs)
 ---
 
 Custom Presence is a python program that utilizes the Discord RPC to make a custom status.
