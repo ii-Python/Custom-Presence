@@ -4,9 +4,9 @@ from presence import crash
 
 # Configuration
 configuration = {
-    "app_id": "781764116188495882",  # Make sure this is a string
+    "app_id": "781764116188495882",  # The application ID to connect to (https://discord.com/developers/applications)
     "updateTime": 15,  # The amount of time before the status is refreshed
-    "applications": {  # The applications you want for the status to display
+    "applications": {  # The applications you want for the status to display (for websites, check presence/core/web.py)
         # "text" represents the second-line of text displayed
         # "longName" represents the title line on the status
         # "weight" respresents the "weight" of the application
@@ -74,6 +74,7 @@ configuration = {
     "useWeight": True  # Whether or not to display applications based on their weight
 }
 
+# Configuration class
 class Config:
 
     def __init__(self):

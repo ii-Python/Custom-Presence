@@ -12,9 +12,12 @@ import pypresence
 import win32process
 
 from random import choice
-from .hash import generate_key
+from .web import websites
 
+from .hash import generate_key
 from ..colors import colored, clear
+
+from ..scripts.cmd import run_commands
 from ..logging import crash, info, verbose
 
 # Client class
@@ -32,24 +35,6 @@ class Client(pypresence.Presence):
         self.config = config
         self.prev_time = None
         self.prev_app = None
-        self.websites = {
-            "YouTube": {
-                "icon_name": "youtube",
-                "name": "Watching YouTube",
-                "text": "{}"
-            },
-            "Watch on Crunchyroll": {
-                "icon_name": "crunchyroll",
-                "name": "Watching Anime",
-                "text": "{}"
-            },
-            # Kinky shit
-            "Pornhub.com": {
-                "icon_name": "ph",
-                "name": "😉",
-                "text": "I-"
-            }
-        }
 
         try:
             self.join_key = generate_key(self.config)
@@ -91,9 +76,9 @@ class Client(pypresence.Presence):
             website = website.rsplit(" - ")[-1]
 
         # Rich presence
-        if website in self.websites:
+        if website in websites:
 
-            website = self.websites[website]
+            website = websites[website]
             text = website["text"].format(page)
             if text != "":
 
@@ -125,59 +110,9 @@ class Client(pypresence.Presence):
         return self.prev_time
 
     def init(self):
+        run_commands()
 
-        # Help command
-        if "--setup" in sys.argv:
-
-            running = []
-            for proc in psutil.process_iter():
-                
-                name = proc.name().replace(".exe", "")
-
-                if name not in running:
-                    running.append(name)
-
-            print(colored("So, you want to setup a new application for the status changer.", "green"))
-            print(colored("In short, it should follow the following syntax:", "green"))
-            print(colored(json.dumps({"APPEXE_NAME": {"text": "Small Text", "longName": "Full Application Name"}}, indent = 4), "yellow"))
-            print()
-            print(colored("For the APPEXE_NAME, you should choose the one you want from the list (make sure the app you want is running):", "green"))
-            print(colored("".join(p + ", " for p in running)[:-2], "yellow"))
-            print()
-            print(colored(f"This is important! Make sure you go to https://discord.com/developers/applications/{self.config['app_id']}/rich-presence/assets", "green"))
-            print(colored("and make sure you upload an image for your application. Its name must be the all-lowercase form of APPEXE_NAME.", "green"))
-            exit()
-
-        # Update script
-        if "--update" in sys.argv:
-
-            print(colored("Custom Presence - Automatic Update Script", "yellow"))
-            print()
-
-            print(colored("Saving config file to memory...", "yellow"))
-            config = open("config.py", "r").read()
-            print(colored("  saved!", "green"))
-
-            print(colored("Stashing stages...", "yellow"))
-            os.system("git stash")
-            print(colored("  done!", "green"))
-
-            print(colored("Cloning update (using origin remote)...", "yellow"))
-            os.system("git pull origin master")
-            print(colored("  done!", "green"))
-
-            print(colored("Reverting to old configuration...", "yellow"))
-            open("config.py", "w").write(config)
-            print(colored("  done!", "green"))
-
-            print(colored("Installing dependencies (requirements.txt)...", "yellow"))
-            os.system("python -m pip install -r requirements.txt")
-            print(colored("  done!", "green"))
-
-            print()
-
-            print(colored("Update has been completed!", "green"))
-            exit()
+        # todo: add some sort of clock here idk
 
     def get_bg_apps(self):
 
