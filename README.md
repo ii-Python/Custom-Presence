@@ -1,5 +1,6 @@
 # Custom Presence
 ### a small RPC presence program designed for customizability
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org)
 ---
 
 Custom Presence is a python program that utilizes the Discord RPC to make a custom status.

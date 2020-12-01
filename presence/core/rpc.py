@@ -11,9 +11,10 @@ import win32gui
 import pypresence
 import win32process
 
+from random import choice
 from ..colors import colored
-from .hash import generate_key
 
+from .hash import generate_key
 from ..logging import crash, info
 
 # Client class
@@ -27,6 +28,8 @@ class Client(pypresence.Presence):
         print()
 
         self.config = config
+        self.prev_time = None
+        self.prev_app = None
         self.websites = {
             "YouTube": {
                 "icon_name": "youtube",
@@ -94,6 +97,24 @@ class Client(pypresence.Presence):
                 }
 
         return (app, data)
+
+    def time(self):
+
+        return round(time.time())
+
+    def previous_time(self, app):
+
+        if not self.prev_app:
+            self.prev_app = app
+
+        if self.prev_time:
+            if self.prev_app != app:
+                self.prev_app = app
+                self.prev_time = self.time()
+            return self.prev_time
+
+        self.prev_time = self.time()
+        return self.prev_time
 
     def init(self):
 
@@ -165,6 +186,25 @@ class Client(pypresence.Presence):
             return None
 
         name = name if self.config["forceApp"] is None else self.config["forceApp"]
+
+        # Check our program weight
+        if self.config["useWeight"]:
+            if name in self.config["applications"]:
+                _ = self.config["applications"][name]
+                if _["weight"] == 0:
+                    # Prefer to seek out a background task
+                    running = []
+                    for program in psutil.process_iter():
+                        name = program.name().replace(".exe", "")
+                        if name in running: continue
+                        if name in self.config["applications"] and self.config["applications"][name]["weight"] > 0:
+                            running.append(name)
+
+                    if running:
+                        name = choice(running)
+                        if not self.prev_app or self.prev_app != name:
+                            info(colored(f"The {name} application is running and will override other applications.", "green"))
+
         return (name, win32gui.GetWindowText(app))
 
     def kill(self):
@@ -205,7 +245,7 @@ class Client(pypresence.Presence):
         if app == "chrome":
             (app, data) = self._rich_google_status(title)
 
-        # Update our presence
+        # Lobby data
         lobby = {}
 
         if self.config["allowJoining"]:
@@ -215,6 +255,12 @@ class Client(pypresence.Presence):
                 "party_size": [1, self.config["maxJoinSize"]]
             }
 
+        # Experimental time
+        time = {}
+        if self.config["showElapsed"]:
+            time["start"] = self.previous_time(app)
+
+        # Update our presence
         try:
             r = self.update(
                 # State information
@@ -225,6 +271,8 @@ class Client(pypresence.Presence):
                 large_text = data["longName"],
                 small_image = self.config["smallImage"],
                 small_text = self.config["hoverText"],
+                # Experimental time
+                **time,
                 # Game and lobbies
                 **lobby
             )
