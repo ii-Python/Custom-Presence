@@ -14,8 +14,8 @@ import win32process
 from random import choice
 from .web import websites
 
+from ..colors import colored
 from .hash import generate_key
-from ..colors import colored, clear
 
 from ..scripts.cmd import run_commands
 from ..logging import crash, info, verbose
@@ -25,8 +25,6 @@ class Client(pypresence.Presence):
 
     def __init__(self, config, host, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
-        clear()  # Nice effect, right?
 
         info(colored(host.__copyright__, "blue"))
         info(colored(f"Running RPC v{host.__version__}", "blue"))

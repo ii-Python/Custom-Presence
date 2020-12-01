@@ -13,6 +13,7 @@ except ImportError:
 
 # Initialize colorama
 colorama.init()
+presence.clear()  # Clear the screen for effect
 
 # Initialization
 rpc = presence.RPC.Client(config, presence, config["app_id"])
