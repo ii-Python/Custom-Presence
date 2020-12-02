@@ -22,7 +22,7 @@ def has_command(cmd):
 
 def run_commands():
 
-    # Help command
+    # Setup command
     if has_command("--setup"):
 
         running = []
@@ -73,4 +73,25 @@ def run_commands():
         print()
 
         print(colored("Update has been completed!", "green"))
+        exit()
+
+    # Help command
+    if has_command("--help"):
+
+        print(colored("Custom Presence v2", "green"))
+        print(colored("a project by iiPython", "green"))
+        print(colored("============================", "green"))
+
+        print()
+        print(colored("Super simple RPC project designed for stability and performance.", "blue"))
+        print(colored("Features support for apps such as ROBLOX, Among Us, Spotify, etc.", "blue"))
+        print(colored("*includes a custom Google Chrome rich presence feature.", "blue"))
+        print()
+        print(colored("Everything is customizable inside of config.py", "blue"))
+        print(colored("Feel free to contribute or support the project! :D", "blue"))
+        print()
+
+        print(colored("Github page: https://github.com/ii-Python/Custom-Presence", "yellow"))
+        print(colored("Contact me: iiPython#0768", "yellow"))
+
         exit()

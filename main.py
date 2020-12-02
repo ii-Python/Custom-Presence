@@ -11,13 +11,15 @@ try:
 except ImportError:
     presence.crash("Something went wrong while loading the configuration. Please consult the documentation.")
 
+# Initialize commands
+presence.run_commands()
+
 # Initialize colorama
 colorama.init()
 presence.clear()  # Clear the screen for effect
 
-# Initialization
+# Initialize RPC
 rpc = presence.RPC.Client(config, presence, config["app_id"])
-rpc.init()
 
 # Main loop
 while True:

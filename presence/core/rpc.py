@@ -1,3 +1,5 @@
+# todo: lighten this file a little more
+
 # Modules
 import os
 import sys
@@ -17,7 +19,6 @@ from .web import websites
 from ..colors import colored
 from .hash import generate_key
 
-from ..scripts.cmd import run_commands
 from ..logging import crash, info, verbose
 
 # Client class
@@ -106,11 +107,6 @@ class Client(pypresence.Presence):
 
         self.prev_time = self.time()
         return self.prev_time
-
-    def init(self):
-        run_commands()
-
-        # todo: add some sort of clock here idk
 
     def get_bg_apps(self):
 
