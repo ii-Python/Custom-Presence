@@ -71,7 +71,8 @@ configuration = {
     "maxJoinSize": 6,  # The maximum amount of people that can join your "activity"
     "allowJoining": False,  # Whether to display a "Join" button on your status or not
     "showElapsed": True,  # Whether or not to display the "00:00 elapsed" text on your status
-    "useWeight": True  # Whether or not to display applications based on their weight
+    "useWeight": True,  # Whether or not to display applications based on their weight
+    "chromeRP": True  # Whether or not to enable chrome rich presence
 }
 
 # Configuration class

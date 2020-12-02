@@ -213,7 +213,7 @@ class Client(pypresence.Presence):
         data = self.config["applications"][app]
 
         # Google chrome rich status
-        if app == "chrome":
+        if app == "chrome" and self.config["chromeRP"]:
             (app, data) = self._rich_google_status(title)
 
         # Lobby data
