@@ -16,3 +16,7 @@ venv.bak/
 
 # RPC
 rpc.json
+
+# Hide IDE's
+.vscode/
+.idea/

@@ -16,8 +16,8 @@ import win32process
 from random import choice
 from .web import websites
 
-from ..colors import colored
 from .hash import generate_key
+from ..colors import colored, clear
 
 from ..logging import crash, info, verbose
 
@@ -27,27 +27,26 @@ class Client(pypresence.Presence):
     def __init__(self, config, host, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        info(colored(host.__copyright__, "blue"))
-        info(colored(f"Running RPC v{host.__version__}", "blue"))
-        print()
-
         self.config = config
         self.prev_time = None
         self.prev_app = None
 
-        try:
-            self.join_key = generate_key(self.config)
-            self.party_id = generate_key(self.config)
-        except TypeError:
-            crash("The secretLib used is not valid in the context required. Please check the documentation.")
+        self.join_key = generate_key(self.config)
+        self.party_id = generate_key(self.config)
 
-        try:
-            info(colored("Starting Custom Presence...", "green"))
-            self.connect()
-        except pypresence.exceptions.InvalidPipe:
-            crash("Discord is not running!")
+        self.alerts = {
+            "none_running": "No valid apps running, waiting for one to open."
+        }
+
+        info(colored("Starting Custom Presence...", "green"))
+        self._connect()
 
         # Information
+        clear()  # Nice clear effect
+
+        info(colored(host.__copyright__, "blue"))
+        info(colored(f"Running RPC v{host.__version__}", "blue"))
+
         print()
 
         info(colored("The status changer has been started; press CTRL+C at any time to stop it.", "blue"))
@@ -55,10 +54,18 @@ class Client(pypresence.Presence):
 
         print()
 
+        # Join and party keys
         if "--show-keys" in sys.argv:
             info(colored("Keys generated (don't share these!):", "yellow"))
             info(colored(f"  Join key: {self.join_key}", "yellow"))
             info(colored(f"  Party ID: {self.party_id}", "yellow"))
+
+    def _connect(self):
+
+        try:
+            self.connect()
+        except pypresence.exceptions.InvalidPipe:
+            crash("No running discord instance was detected.")
 
     def _rich_google_status(self, title):
 
@@ -88,9 +95,10 @@ class Client(pypresence.Presence):
                     "longName": website["name"]
                 }
 
-        return (app, data)
+        return app, data
 
-    def time(self):
+    @staticmethod
+    def time():
 
         return round(time.time())
 
@@ -110,12 +118,15 @@ class Client(pypresence.Presence):
 
     def get_bg_apps(self):
 
-        running = []
-        for program in psutil.process_iter():
-            name = program.name().replace(".exe", "")
-            if name in running: continue
-            if name in self.config["applications"]:
-                running.append(name)
+        try:
+            running = []
+            for program in psutil.process_iter():
+                name = program.name().replace(".exe", "")
+                if name in running: continue
+                if name in self.config["applications"]:
+                    running.append(name)
+        except KeyboardInterrupt:
+            self.kill()  # Rare, but it happens
 
         return running
 
@@ -161,7 +172,7 @@ class Client(pypresence.Presence):
                             info(colored(f"The {name} application is running and will override other applications.", "green"))
 
         # This really isn't a valid app, seek out something else
-        if not name in self.config["applications"]:
+        if name not in self.config["applications"]:
             apps = self.get_bg_apps()
             if apps:
 
@@ -172,7 +183,7 @@ class Client(pypresence.Presence):
                 # prevent issues, if not file a bug report.
                 name = choice(apps)
 
-        return (name, win32gui.GetWindowText(app))
+        return name, win32gui.GetWindowText(app)
 
     def kill(self):
 
@@ -188,23 +199,26 @@ class Client(pypresence.Presence):
         info(colored("Status changer stopped via CTRL+C.", "red"))
         exit()
 
-    def wait(self, extraDelay: int = 0):
+    def wait(self, delay: int = 0):
 
         if self.config["updateTime"] < 15:
             crash("updateTime needs to be at least a 15 second interval!")
 
-        try: time.sleep(self.config["updateTime"] + extraDelay)
+        try: time.sleep(self.config["updateTime"] + delay)
         except KeyboardInterrupt: self.kill()
 
     def set_presence(self, app):
+
+        if app is None:
+            return info(colored(self.alerts["none_running"], "yellow"))
 
         name = app[0]
         title = app[1]
 
         app = name
 
-        if app is None or not app in self.config["applications"]:
-            return info(colored("No applications in the database currently running (skipping turn)", "red"))
+        if app is None or app not in self.config["applications"]:
+            return info(colored(self.alerts["none_running"], "yellow"))
 
         data = self.config["applications"][app]
 
@@ -223,9 +237,9 @@ class Client(pypresence.Presence):
             }
 
         # Experimental time
-        time = {}
+        elapsed = {}
         if self.config["showElapsed"]:
-            time["start"] = self.previous_time(app)
+            elapsed["start"] = self.previous_time(app)
 
         # Update our presence
         try:
@@ -238,10 +252,10 @@ class Client(pypresence.Presence):
                 large_text = data["longName"],
                 small_image = self.config["smallImage"],
                 small_text = self.config["hoverText"],
-                # Experimental time
-                **time,
                 # Game and lobbies
-                **lobby
+                **lobby,
+                # Time
+                **elapsed
             )
         except pypresence.exceptions.InvalidID:
             crash("Discord was closed while the status was running.")
@@ -249,5 +263,6 @@ class Client(pypresence.Presence):
             self.kill()
 
         open("rpc.json", "w+").write(json.dumps(r, indent = self.config["indentSize"]))
-        if "--show-rpc-dump" in sys.argv: 
-            info(colored(f"RPC information dumped to rpc.json (refreshing in {self.config['updateTime']} seconds(s))", "green"))
+        if "--show-rpc-dump" in sys.argv:
+            sec = self.config["updateTime"]
+            info(colored(f"RPC information dumped to rpc.json (refreshing in {sec} seconds(s))", "green"))
