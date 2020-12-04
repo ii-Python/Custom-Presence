@@ -135,12 +135,18 @@ class Client(pypresence.Presence):
         app = win32gui.GetForegroundWindow()
         verbose("Located app", app, "as the foreground window.")
 
+        # For when a process is quickly closed or for the desktop sometimes
         try:
             pid = win32process.GetWindowThreadProcessId(app)
             process = psutil.Process(pid[-1])
-        except [psutil.NoSuchProcess, ValueError] as err:
+        except psutil.NoSuchProcess as err:
             verbose("Failed to fetch process info for", app, "with", err)
-            return None  # Callback for when a process is quickly closed or for the desktop sometimes
+            return None
+        except ValueError as err:
+            verbose("Failed to fetch process info for", app, "with", err)
+            return None
+        except KeyboardInterrupt:
+            self.kill()  # Just a small precaution
 
         name = process.name().replace(".exe", "")
         if name is None:
