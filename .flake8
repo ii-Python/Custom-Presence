@@ -1,8 +1,0 @@
-[flake8]
-ignore = E111, E251, E302, E305, E501, E701, W293
-exclude =
-    .git,
-    .idea,
-    .vscode,
-    __init__.py,
-    __pycache__,
