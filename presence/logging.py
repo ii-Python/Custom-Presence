@@ -17,6 +17,4 @@ def crash(m):
 def verbose(*args):
 
     if "-v" not in sys.argv: return
-
-    time = datetime.now().strftime("%I:%M:%S %p")
-    print(colored(f"[{time} (vbs)]:", "yellow"), *args)
+    info(colored("[verbose]", "yellow") + " " + colored("".join(str(a) + " " for a in args)[:-1], "yellow"))

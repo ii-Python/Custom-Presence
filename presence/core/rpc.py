@@ -191,7 +191,7 @@ class Client(pypresence.Presence):
 
         return name, win32gui.GetWindowText(app)
 
-    def kill(self):
+    def kill(self, ctrl = True):
 
         self.close()  # Close the RPC connection to allow other statuses
         
@@ -202,7 +202,9 @@ class Client(pypresence.Presence):
             except FileNotFoundError: pass
 
         # Print & exit
-        info(colored("Status changer stopped via CTRL+C.", "red"))
+        if ctrl:
+            info(colored("Status changer stopped via CTRL+C.", "red"))
+
         exit()
 
     def wait(self, delay: int = 0):
@@ -265,6 +267,7 @@ class Client(pypresence.Presence):
             )
         except pypresence.exceptions.InvalidID:
             crash("Discord was closed while the status was running.")
+            self.kill(ctrl = False)
         except KeyboardInterrupt:
             self.kill()
 
