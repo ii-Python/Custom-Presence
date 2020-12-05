@@ -200,6 +200,7 @@ class Client(pypresence.Presence):
             try: os.remove("rpc.json")
             except PermissionError: pass
             except FileNotFoundError: pass
+            except Exception as err: verbose("Failed to remove RPC dump with error", err)
 
         # Print & exit
         if ctrl:
