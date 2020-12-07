@@ -1,0 +1,18 @@
+Key name               Inner key               Type               Description
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+app_id                                         String             The application ID to connect to (https://discord.com/developers/applications)
+updateTime                                     Integer            The amount of time before the status is refreshed
+applications                                   Nested             The applications you want for the status to display (for websites, check presence/core/web.py)
+                       name                    String             Represents the title line of the status
+                       text                    String             Represents the second-line of text displayed
+                       weight                  Integer            Represents the weight of the application (the higher, the more "important")
+hoverText                                      String             The text that shows when you hover over the image
+indentSize                                     Integer            The indentation level of rpc.json
+forceApp                                       String             The name of an application to force
+smallImage                                     String             The image to use as a small icon
+maxJoinSize                                    Integer            The maximum amount of people that can join your "activity"
+allowJoining                                   Boolean            Whether to display a "Join" button on your status or not
+showElapsed                                    Boolean            Whether or not to display the "00:00 elapsed" text on your status
+useWeight                                      Boolean            Whether or not to display applications based on their weight
+showChromeRP                                   Boolean            Whether or not to enable chrome rich presence

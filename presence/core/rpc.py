@@ -24,11 +24,12 @@ class Client(pypresence.Presence):
         super().__init__(*args, **kwargs)
 
         self.config = config
+
         self.prev_time = None
         self.prev_app = None
 
-        self.join_key = generate_key(self.config)
-        self.party_id = generate_key(self.config)
+        self.join_key = generate_key()
+        self.party_id = generate_key()
 
         self.alerts = {
             "none_running": "No valid apps running, waiting for one to open."
@@ -66,7 +67,7 @@ class Client(pypresence.Presence):
 
                 data = {
                     "text": text,
-                    "longName": website["name"]
+                    "name": website["name"]
                 }
 
         return app, data
@@ -131,25 +132,36 @@ class Client(pypresence.Presence):
 
         # Check our program weight
         if self.config["useWeight"]:
-            if name in self.config["applications"]:
-                _ = self.config["applications"][name]
-                if _["weight"] == 0:
 
-                    # Prefer to seek out a background task
-                    verbose("Searching for tasks with a higher weight then 1...")
+            # Prefer to seek out a background task
+            verbose("Searching for tasks with a higher weight then 1...")
 
-                    rn = self.get_bg_apps()
-                    running = []
-                    for _rn in rn:
-                        if self.config["applications"][_rn]["weight"] > 0:
-                            verbose(" ", "found app", _rn, "with weight of", self.config["applications"][_rn]["weight"])
-                            running.append(_rn)
+            rn = self.get_bg_apps()
 
-                    if running:
-                        name = choice(running)
-                        verbose("Chose", name, "as the weighted background app!")
-                        if not self.prev_app or self.prev_app != name:
-                            info(colored(f"The {name} application is running and will override other applications.", "green"))
+            running = []
+            for _rn in rn:
+                weight = self.config["applications"][_rn]["weight"]
+
+                if weight > 0:
+                    verbose(" ", "found app", _rn, "with weight of", weight)
+                    running.append((_rn, weight))
+
+            # Pick the biggest one
+            if not running: verbose(" ", "none found, skipping weight")
+            else:
+                weights = [a[1] for a in running]
+                maxWeight = max(weights)
+
+                weighted = []
+                for _ in running:
+                    if _[1] == maxWeight:
+                        weighted.append(_)
+
+                name = choice(weighted)[0]
+
+                verbose("Chose", name, "as the weighted background app!")
+                if not self.prev_app or self.prev_app != name:
+                    info(colored(f"The {name} application is running and will override other applications.", "green"))
 
         # This really isn't a valid app, seek out something else
         if name not in self.config["applications"]:
@@ -158,9 +170,6 @@ class Client(pypresence.Presence):
 
                 # We are able to set the name since chrome is the only
                 # app that depends on GetWindowText, instead of others.
-
-                # By default chrome would have a weight higher than 0 to
-                # prevent issues, if not file a bug report.
                 name = choice(apps)
 
         return name, win32gui.GetWindowText(app)
@@ -206,7 +215,7 @@ class Client(pypresence.Presence):
         data = self.config["applications"][app]
 
         # Google chrome rich status
-        if app == "chrome" and self.config["chromeRP"]:
+        if app == "chrome" and self.config["showChromeRP"]:
             (app, data) = self._rich_google_status(title)
 
         # Lobby data
@@ -228,11 +237,11 @@ class Client(pypresence.Presence):
         try:
             self.dump = self.update(
                 # State information
-                details = data["longName"],
+                details = data["name"],
                 state = data["text"],
                 # Images
                 large_image = app.lower().replace(" ", ""),
-                large_text = data["longName"],
+                large_text = data["name"],
                 small_image = self.config["smallImage"],
                 small_text = self.config["hoverText"],
                 # Game and lobbies

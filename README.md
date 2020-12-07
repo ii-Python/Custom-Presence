@@ -42,13 +42,5 @@ Provided is a list of available options:
   - Make sure there are no syntax errors
   - Make sure that the `Config` class exists and is callable.
 
-"The secretLib used is not valid in the context required":
-  - Make sure the `secretLib` in `config.py` does not require a length passed to it.
-    - This means that `shake` algorithms cannot be used as `secretLib`.
-  - Make sure that `secretLib` is not set to `None`.
-
-"secretLib needs to be set in order to use this":
-  - Make sure that `secretLib` is not set to `None`.
-
 "updateTime needs to be at least a 15 second interval":
   - Set `updateTime` to a value bigger than (or equal to) 15 (the required RPC delay).

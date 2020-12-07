@@ -1,0 +1,66 @@
+{
+    "_over": "Consult values.txt for more information",
+    "app_id": "781764116188495882",
+    "updateTime": 15,
+    "applications": {
+        "Code": {
+            "text": "Programming something",
+            "name": "Visual Studio Code",
+            "weight": 0
+        },
+        "chrome": {
+            "text": "Exploring the web",
+            "name": "Google Chrome",
+            "weight": 0
+        },
+        "Discord": {
+            "text": "Talking to someone",
+            "name": "Discord",
+            "weight": 0
+        },
+        "Spotify": {
+            "text": "Listening to music",
+            "name": "Spotify",
+            "weight": 1
+        },
+        "RobloxPlayerBeta": {
+            "text": "Playing a game",
+            "name": "Roblox Player",
+            "weight": 0
+        },
+        "Twitch": {
+            "text": "Watching a stream",
+            "name": "Twitch",
+            "weight": 1
+        },
+        "MinecraftLauncher": {
+            "text": "Playing Minecraft",
+            "name": "Minecraft",
+            "weight": 0
+        },
+        "msedge": {
+            "text": "Browsing the web",
+            "name": "Microsoft Edge",
+            "weight": 0
+        },
+        "steam": {
+            "text": "Exploring steam",
+            "name": "Steam",
+            "weight": 0
+        },
+        "Among Us": {
+            "text": "Playing in a round",
+            "name": "Among Us",
+            "weight": 0
+        }
+    },
+    "hoverText": "Ben's Custom Status",
+    "indentSize": 4,
+    "forceApp": null,
+    "smallImage": "goose",
+    "maxJoinSize": 6,
+    "allowJoining": false,
+    "showElapsed": true,
+    "useWeight": true,
+    "showChromeRP": true
+}

@@ -1,18 +1,11 @@
 # Modules
 import string
 import random
-from ..logging import crash
+import hashlib
 
 # Generate secrets
 def generate_base():
     return "".join(str(random.choice(string.digits)) for _ in range(0, 26))
 
-def generate_key(config):
-
-    if config["secretLib"] is None:
-        crash("secretLib needs to be set in order to use this! If you don't know what that is, set it to hashlib.sha256")
-
-    try:
-        return config["secretLib"](generate_base().encode("UTF-8")).hexdigest()
-    except ValueError:
-        crash("The secretLib used is not valid in the context required. Please check the documentation.")
+def generate_key():
+    return hashlib.sha256(generate_base().encode("UTF-8")).hexdigest()
