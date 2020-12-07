@@ -1,12 +1,8 @@
-# todo: lighten this file a little more
-
 # Modules
 import os
 import sys
 
 import time
-import json
-
 import psutil
 import win32gui
 
@@ -16,15 +12,15 @@ import win32process
 from random import choice
 from .web import websites
 
+from ..colors import colored
 from .hash import generate_key
-from ..colors import colored, clear
 
 from ..logging import crash, info, verbose
 
 # Client class
 class Client(pypresence.Presence):
 
-    def __init__(self, config, host, *args, **kwargs):
+    def __init__(self, config, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         self.config = config
@@ -37,28 +33,6 @@ class Client(pypresence.Presence):
         self.alerts = {
             "none_running": "No valid apps running, waiting for one to open."
         }
-
-        info(colored("Starting Custom Presence...", "green"))
-        self._connect()
-
-        # Information
-        clear()  # Nice clear effect
-
-        info(colored(host.__copyright__, "blue"))
-        info(colored(f"Running RPC v{host.__version__}", "blue"))
-
-        print()
-
-        info(colored("The status changer has been started; press CTRL+C at any time to stop it.", "blue"))
-        info(colored("Thanks for using Custom Presence, feel free to support the project! :D", "blue"))
-
-        print()
-
-        # Join and party keys
-        if "--show-keys" in sys.argv:
-            info(colored("Keys generated (don't share these!):", "yellow"))
-            info(colored(f"  Join key: {self.join_key}", "yellow"))
-            info(colored(f"  Party ID: {self.party_id}", "yellow"))
 
     def _connect(self):
 
@@ -252,7 +226,7 @@ class Client(pypresence.Presence):
 
         # Update our presence
         try:
-            r = self.update(
+            self.dump = self.update(
                 # State information
                 details = data["longName"],
                 state = data["text"],
@@ -271,8 +245,3 @@ class Client(pypresence.Presence):
             self.kill(ctrl = False)
         except KeyboardInterrupt:
             self.kill()
-
-        open("rpc.json", "w+").write(json.dumps(r, indent = self.config["indentSize"]))
-        if "--show-rpc-dump" in sys.argv:
-            sec = self.config["updateTime"]
-            info(colored(f"RPC information dumped to rpc.json (refreshing in {sec} seconds(s))", "green"))
