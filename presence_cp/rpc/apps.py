@@ -52,7 +52,7 @@ class ApplicationHandler(object):
             verbose("Located app", app, "as the foreground window.")
 
             # For when a process is quickly closed or for the desktop sometimes
-            pid = win32process.GetWindowThreadProcessId(app)
+            pid = win32process.GetWindowThreadProcessId(app)[-1]
 
         else:
 
@@ -60,4 +60,6 @@ class ApplicationHandler(object):
             apps = self.get_available_bg_apps()
             pid = random.choice(apps)
 
-        return pid
+        # Turn our PID into a psutil process
+        app = psutil.Process(pid)
+        print(app.name())
