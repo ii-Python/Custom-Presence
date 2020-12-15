@@ -10,7 +10,7 @@ class CustomPresence(pypresence.Presence):
         super().__init__(config["app_id"])
 
     def kill(self):
-        ass
+        pass
 
     def establish(self):
         try:
