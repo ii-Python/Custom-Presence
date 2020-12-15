@@ -4,7 +4,7 @@
 ---
 
 Custom Presence is a python program that utilizes the Discord RPC to make a custom status.
-It relies on `pypresence` as well as `psutil`; it also requires `colorama` for Windows color support.
+Built completely on `pypresence` as well as `psutil`; it also requires `colorama` for full color support.
 
 ## Install
 ---
@@ -12,18 +12,21 @@ To install Custom Presence you require Python 3.6+ (3.8+ is recommended).
 
 **Using Git (recommended method):**
   - Clone the repository with `git clone https://github.com/ii-Python/Custom-Presence.git && cd Custom-Presence`
-  - Install the required dependencies with `python -m pip install -r requirements.txt`.
+  - Install the required dependencies with `python3 -m pip install -r requirements.txt`.
 
-Once installed, you can launch the presence with `python main.py`.
+Following completion, you can run the script with `python3 main.py`.
+
+The script also comes with a built-in update script, available via `python3 main.py --update`.
 
 ## Documentation
 ---
 
-You can use `config.py` to setup custom programs, change refresh times, etc.
+Custom Presence is meant to be completely customizable, and with that said it is.
+The `config/config.json` file contains all of the data that the script uses and `config/values.txt` explains all of the json file values. You can change the application ID (in case you have your own), the refresh rate, the applications, whether to enable chrome rich presence, toggle joining, etc.
 
-For a small example of adding a custom program to it, run `python main.py --setup` for instructions.
+For more information please check out `config/values.txt`.
 
-
+#### CLI Syntax
 ---
 Custom Presence has the following syntax:
 ```
@@ -32,7 +35,7 @@ main.py [options]
 
 Provided is a list of available options:
   - `--show-keys`, which prints the join and party key
-  - `--show-rpc-dump`, which shows when the script dumps to `rpc.json`
+  - `--keep-rpc`, which stops the script from deleting `rpc.json` on exit
 
 ### Troubleshooting
 ---

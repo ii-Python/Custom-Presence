@@ -48,6 +48,14 @@ info(colored("Thanks for using Custom Presence, feel free to support the project
 
 print()
 
+# Join and party keys
+if "--show-keys" in sys.argv:
+    info(colored("Keys generated (don't share these!):", "yellow"))
+    info(colored(f"  Join key: {keys['join']}", "yellow"))
+    info(colored(f"  Party ID: {keys['party']}", "yellow"))
+
+    print()
+
 # Master loop
 app_handler = presence_cp.ApplicationHandler(rpc)
 while True:
