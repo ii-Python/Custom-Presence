@@ -3,7 +3,7 @@
     "app_id": "781764116188495882",
     "updateTime": 15,
     "applications": {
-        "Code": {
+        "code": {
             "text": "Programming something",
             "name": "Visual Studio Code",
             "weight": 0
@@ -13,27 +13,27 @@
             "name": "Google Chrome",
             "weight": 0
         },
-        "Discord": {
+        "discord": {
             "text": "Talking to someone",
             "name": "Discord",
             "weight": 0
         },
-        "Spotify": {
+        "spotify": {
             "text": "Listening to music",
             "name": "Spotify",
             "weight": 1
         },
-        "RobloxPlayerBeta": {
+        "robloxplayerbeta": {
             "text": "Playing a game",
             "name": "Roblox Player",
             "weight": 0
         },
-        "Twitch": {
+        "twitch": {
             "text": "Watching a stream",
             "name": "Twitch",
             "weight": 1
         },
-        "MinecraftLauncher": {
+        "minecraftlauncher": {
             "text": "Playing Minecraft",
             "name": "Minecraft",
             "weight": 0
@@ -48,7 +48,7 @@
             "name": "Steam",
             "weight": 0
         },
-        "Among Us": {
+        "among us": {
             "text": "Playing in a round",
             "name": "Among Us",
             "weight": 0
