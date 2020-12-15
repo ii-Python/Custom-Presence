@@ -39,9 +39,39 @@ class ApplicationHandler(object):
 
         return running
 
+    def app_running(self, name):
+
+        for app in self.get_bg_apps():
+
+            try:
+                p = psutil.Process(app)
+            except psutil.NoSuchProcess:
+                continue
+
+            if p.name().replace(".exe", "").lower() == name:
+                return True
+
+        return False
+
     def get_available_bg_apps(self):
 
-        return self.get_bg_apps()
+        apps = []
+        for a in self.get_bg_apps():
+
+            try:
+                p = psutil.Process(a)
+            except psutil.NoSuchProcess:
+                continue
+            
+            n = p.name().replace(".exe", "").lower()
+            if n in self.rpc.config["applications"]:
+                if self.app_running(n):
+                    apps.append(p.pid)
+
+        if not apps:
+            apps = self.get_bg_apps()
+
+        return apps
 
     def locate_app(self):
 
@@ -62,4 +92,24 @@ class ApplicationHandler(object):
 
         # Turn our PID into a psutil process
         app = psutil.Process(pid)
-        print(app.name())
+        app = app.name()
+        
+        app = app.replace(".exe", "")  # windows
+        app = app.lower()  # lowercase-only
+
+        # Run through our weighted apps
+        apps = self.rpc.config["applications"]
+        weighted = {}
+        for _ in apps:
+            if apps[_]["weight"] > 0:
+                if self.app_running(_):
+                    weighted[_] = apps[_]["weight"]
+
+        if weighted:
+            app = max(weighted, key = len)
+
+        # Check our app is available
+        if not app in self.rpc.config["applications"]:
+            return None
+
+        return app

@@ -3,9 +3,11 @@
 
 # Modules
 import sys
-import colorama
+import json
 
+import colorama
 import presence_cp
+
 from time import sleep
 
 # Load configuration
@@ -27,10 +29,11 @@ keys = {
 
 # Establish connection
 info = presence_cp.info
+crash = presence_cp.crash
 colored = presence_cp.colored
 
 info(colored("Starting Custom Presence...", "green"))
-rpc.establish()
+rpc.establish(keys)
 
 # Information
 presence_cp.clear()  # Nice clear effect
@@ -51,7 +54,20 @@ while True:
 
     # Locate the running app
     app = app_handler.locate_app()
-    print(app)
+
+    # Set status
+    if app is not None:
+        dump = rpc.set_status(app)
+
+        # RPC dumping
+        with open("rpc.json", "w+") as f:
+            f.write(json.dumps(dump, indent = 4))
 
     # RPC update interval
-    sleep(config["updateTime"])
+    if config["updateTime"] < 15:
+        crash("updateTime needs to be at least a 15 second interval!")
+
+    try:
+        sleep(config["updateTime"])
+    except KeyboardInterrupt:
+        rpc.kill()
