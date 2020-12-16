@@ -8,7 +8,7 @@ Built completely on `pypresence` as well as `psutil`; it also requires `colorama
 
 ## Install
 ---
-To install Custom Presence you require Python 3.6+ (3.8+ is recommended).
+To install Custom Presence you require Python 3.6+ (3.8.2+ is recommended).
 
 **Using Git (recommended method):**
   - Clone the repository with `git clone https://github.com/ii-Python/Custom-Presence.git && cd Custom-Presence`
