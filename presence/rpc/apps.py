@@ -1,17 +1,15 @@
 # Modules
 import psutil
-import random
-
 import subprocess
-from ..utils.colors import colored
 
+from ..utils.colors import colored
 from ..utils.logging import info, verbose
 
 try:
     import win32gui
     import win32process
 
-except:
+except ImportError:
 
     info(colored("Failed to import pywin32, falling back to linux-based mechanism.", "yellow"))
     win32gui, win32process = None, None
@@ -111,7 +109,7 @@ class ApplicationHandler(object):
             app = max(weighted, key = len)
 
         # Check our app is available
-        if not app in self.rpc.config["applications"]:
+        if app not in self.rpc.config["applications"]:
             return None
 
         return app
