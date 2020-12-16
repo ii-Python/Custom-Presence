@@ -7,6 +7,11 @@ applications                                   Nested             The applicatio
                        name                    String             Represents the title line of the status
                        text                    String             Represents the second-line of text displayed
                        weight                  Integer            Represents the weight of the application (the higher, the more "important")
+browsers                                       List               The names of chromium-based browsers that support our custom rich presence
+websites                                       List               The main list of websites that chromium-based browsers will show on your status
+                       match                   String             The regex expression to to match the website
+                       name                    String             The clean name for the website
+                       icon                    String             The icon name as set in the discord developer portal
 hoverText                                      String             The text that shows when you hover over the image
 indentSize                                     Integer            The indentation level of rpc.json
 forceApp                                       String             The name of an application to force

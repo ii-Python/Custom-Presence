@@ -8,6 +8,7 @@ import pypresence
 from ..utils.errors import errors
 from ..utils.colors import colored
 
+from .chromium import get_chromium_website
 from ..utils.logging import crash, verbose, info
 
 # Presence class
@@ -69,8 +70,17 @@ class CustomPresence(pypresence.Presence):
         return self.prev_time
 
     def set_status(self, app):
-        name = app
-        app = self.config["applications"][app]
+
+        # Chromium browsers
+        if app.endswith("|CSPRC_CHROMIUM"):
+            name, app = get_chromium_website(self.config, app)
+
+            if name is None or app is None:
+                return
+
+        else:
+            name = app
+            app = self.config["applications"][app]
 
         # Lobby data
         lobby = {}

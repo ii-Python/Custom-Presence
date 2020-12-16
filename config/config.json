@@ -13,6 +13,11 @@
             "name": "Google Chrome",
             "weight": 0
         },
+        "brave": {
+            "text": "Exploring the web",
+            "name": "Brave Browser",
+            "weight": 0
+        },
         "discord": {
             "text": "Talking to someone",
             "name": "Discord",
@@ -54,6 +59,24 @@
             "weight": 0
         }
     },
+    "browsers": ["chrome", "brave"],
+    "websites": [
+        {
+            "match": "* - YouTube",
+            "name": "YouTube",
+            "icon": "youtube"
+        },
+        {
+            "match": "* - Stack Overflow",
+            "name": "Stack Overflow",
+            "icon": "stackoverflow"
+        },
+        {
+            "match": "* - Roblox",
+            "name": "Roblox Website",
+            "icon": "robloxplayerbeta"
+        }
+    ],
     "hoverText": "Ben's Custom Status",
     "indentSize": 4,
     "forceApp": null,

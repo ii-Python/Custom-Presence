@@ -73,16 +73,30 @@ class ApplicationHandler(object):
 
         return apps
 
+    def get_window_title(self, app):
+
+        if app is not None:
+            return win32gui.GetWindowText(app)
+
+        # Linux method
+        o = subprocess.run(
+            ["xdotool", "getactivewindow", "getwindowname"],
+            stdout = subprocess.PIPE
+        ).stdout
+
+        return o.decode("utf-8")
+
     def locate_app(self):
 
+        win32app = None
         if win32gui is not None:
 
             # Windows method
-            app = win32gui.GetForegroundWindow()
-            verbose("Located app", app, "as the foreground window.")
+            win32app = win32gui.GetForegroundWindow()
+            verbose("Located app", win32app, "as the foreground window.")
 
             # For when a process is quickly closed or for the desktop sometimes
-            pid = win32process.GetWindowThreadProcessId(app)[-1]
+            pid = win32process.GetWindowThreadProcessId(win32app)[-1]
 
         else:
 
@@ -107,6 +121,11 @@ class ApplicationHandler(object):
 
         if weighted:
             app = max(weighted, key = len)
+
+        # Chromium browsers
+        if app in self.rpc.config["browsers"]:
+            title = self.get_window_title(win32app)
+            return title + "|CSPRC_CHROMIUM"
 
         # Check our app is available
         if app not in self.rpc.config["applications"]:
