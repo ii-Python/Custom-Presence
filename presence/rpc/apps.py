@@ -2,7 +2,9 @@
 import psutil
 import random
 
+import subprocess
 from ..utils.colors import colored
+
 from ..utils.logging import info, verbose
 
 try:
@@ -11,7 +13,7 @@ try:
 
 except:
 
-    info(colored("Failed to import pywin32, falling back to old choice mechanism.", "yellow"))
+    info(colored("Failed to import pywin32, falling back to linux-based mechanism.", "yellow"))
     win32gui, win32process = None, None
 
 # Main class
@@ -87,8 +89,8 @@ class ApplicationHandler(object):
         else:
 
             # Linux/*nix systems
-            apps = self.get_available_bg_apps()
-            pid = random.choice(apps)
+            out = subprocess.run(["xdotool", "getactivewindow", "getwindowpid"], stdout = subprocess.PIPE)
+            pid = int(out.stdout.decode("utf-8"))
 
         # Turn our PID into a psutil process
         app = psutil.Process(pid)

@@ -14,6 +14,9 @@ To install Custom Presence you require Python 3.6+ (3.8+ is recommended).
   - Clone the repository with `git clone https://github.com/ii-Python/Custom-Presence.git && cd Custom-Presence`
   - Install the required dependencies with `python3 -m pip install -r requirements.txt`.
 
+**Linux systems:**
+  - In addition to the above steps, you will also need to run `sudo apt-get install xdotool`.
+
 Following completion, you can run the script with `python3 main.py`.
 
 The script also comes with a built-in update script, available via `python3 main.py --update`.

@@ -2,7 +2,7 @@
 
 # Modules
 from json import loads
-from presence_cp import crash
+from presence import crash
 
 # Configuration class
 class Config:

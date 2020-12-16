@@ -1,9 +1,9 @@
-from .core import rpc as RPC
-from .logging import crash, info
+from .rpc import RPC, ApplicationHandler
 
-from .colors import colored, clear
-from .scripts.cmd import run_commands
+from .utils.hashing import generate_key
+from .utils.colors import colored, clear
+from .utils.logging import info, verbose, crash
 
 __author__ = "Benjamin O'Brien (iiPython)"
-__version__ = "0.1.4-alpha"
+__version__ = "0.1.5-alpha"
 __copyright__ = f"Copyright 2020; {__author__}"
