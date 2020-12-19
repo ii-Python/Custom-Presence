@@ -1,4 +1,0 @@
-psutil
-pywin32
-colorama
-pypresence
