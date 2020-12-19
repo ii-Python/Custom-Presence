@@ -57,6 +57,10 @@ if name in requirements:
         install_dep(dep)
         print(f"    installed {dep}")
 
+if name == "posix":
+    print("  installing xdotool...")
+    subprocess.run(["sudo", "apt-get", "install", "xdotool"], stdout = open("installer.log", "a"))
+
 # Clean up our installer
 try:
     remove("installer.log")
