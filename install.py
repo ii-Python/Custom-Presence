@@ -34,7 +34,7 @@ if python is None:
 # Installer
 def install_dep(dep):
     stdout = open("installer.log", "a")
-    subprocess.run([python, "-m", "pip", "install", "--upgrade", dep], stdout = stdout)
+    subprocess.run([python, "-m", "pip", "install", "--upgrade", dep], stdout = stdout, shell = True)
 
 print()
 print("Trying to update pip...")
@@ -51,7 +51,7 @@ for req in requirements["global"]:
 # Install additional requirements
 if name in requirements:
     extra_deps = requirements[name]
-    print(f"  installing extra requirements for {name}...")
+    print(f"  installing extra requirements for {platform.system()}...")
 
     for dep in extra_deps:
         install_dep(dep)
