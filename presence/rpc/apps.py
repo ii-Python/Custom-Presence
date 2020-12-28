@@ -62,7 +62,7 @@ class ApplicationHandler(object):
                 p = psutil.Process(a)
             except psutil.NoSuchProcess:
                 continue
-            
+
             n = p.name().replace(".exe", "").lower()
             if n in self.rpc.config["applications"]:
                 if self.app_running(n):
@@ -104,10 +104,14 @@ class ApplicationHandler(object):
             out = subprocess.run(["xdotool", "getactivewindow", "getwindowpid"], stdout = subprocess.PIPE)
             pid = int(out.stdout.decode("utf-8"))
 
+        # Check our PID is positive
+        if pid < 0:
+            return None  # Incredibly rare to reproduce
+
         # Turn our PID into a psutil process
         app = psutil.Process(pid)
         app = app.name()
-        
+
         app = app.replace(".exe", "")  # windows
         app = app.lower()  # lowercase-only
 

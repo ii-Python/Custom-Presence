@@ -20,7 +20,7 @@ except ImportError:
 
 # Initialization
 colorama.init()
-rpc = presence.RPC(config)
+rpc = presence.RPC(config, 0 if "--ptb" not in sys.argv else 1)
 
 keys = {
     "join": presence.generate_key(),

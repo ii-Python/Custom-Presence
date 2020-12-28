@@ -14,8 +14,8 @@ from ..utils.logging import crash, verbose, info
 # Presence class
 class CustomPresence(pypresence.Presence):
 
-    def __init__(self, config):
-        super().__init__(config["app_id"])
+    def __init__(self, config, pipe = 0):
+        super().__init__(config["app_id"], pipe = pipe)
 
         self.config = config
 
@@ -26,13 +26,18 @@ class CustomPresence(pypresence.Presence):
 
         verbose("Shutting down script...")
         self.close()  # Close the RPC connection to allow other statuses
-        
+
         # Remove RPC dump (for security purposes)
         if "--keep-rpc" not in sys.argv:
-            try: os.remove("rpc.json")
-            except PermissionError: pass
-            except FileNotFoundError: pass
-            except Exception as err: verbose("Failed to remove RPC dump with error", err)
+
+            try:
+                os.remove("rpc.json")
+
+            except (PermissionError, FileNotFoundError):
+                pass
+
+            except Exception as err:
+                verbose("Failed to remove RPC dump with error", err)
 
         # Print & exit
         if ctrl:
@@ -45,9 +50,8 @@ class CustomPresence(pypresence.Presence):
 
         try:
             self.connect()
-        except ConnectionRefusedError:
-            crash(errors["FailedConnect"])
-        except pypresence.exceptions.InvalidPipe:
+
+        except (ConnectionRefusedError, pypresence.exceptions.InvalidPipe):
             crash(errors["FailedConnect"])
 
     def previous_time(self, app):
