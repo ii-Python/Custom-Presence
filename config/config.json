@@ -57,9 +57,14 @@
             "text": "Playing in a round",
             "name": "Among Us",
             "weight": 0
+        },
+        "robloxstudiobeta": {
+            "text": "Editing a game",
+            "name": "Roblox Studio",
+            "weight": 2
         }
     },
-    "browsers": ["chrome", "brave"],
+    "browsers": ["chrome", "brave", "msedge"],
     "websites": [
         {
             "match": "* - YouTube",
@@ -76,6 +81,9 @@
             "name": "Roblox Website",
             "icon": "robloxplayerbeta"
         }
+    ],
+    "buttons": [
+        {"label": "My Website", "url": "https://iipython.cf"}
     ],
     "hoverText": "Ben's Custom Status",
     "indentSize": 4,

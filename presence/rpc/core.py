@@ -112,6 +112,8 @@ class CustomPresence(pypresence.Presence):
                 large_text = app["name"],
                 small_image = self.config["smallImage"],
                 small_text = self.config["hoverText"],
+                # Buttons
+                buttons = self.config["buttons"],
                 # Game and lobbies
                 **lobby,
                 # Time

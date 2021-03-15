@@ -12,6 +12,10 @@ websites                                       List               The main list 
                        match                   String             The regex expression to to match the website
                        name                    String             The clean name for the website
                        icon                    String             The icon name as set in the discord developer portal
+buttons                                        List               List of buttons to display on the status (2 max)
+                       button                  Nested             The button to display
+                         label                 String             The text to display on the button
+                         url                   String             The link the button takes you to
 hoverText                                      String             The text that shows when you hover over the image
 indentSize                                     Integer            The indentation level of rpc.json
 forceApp                                       String             The name of an application to force

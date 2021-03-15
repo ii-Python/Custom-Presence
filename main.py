@@ -1,4 +1,4 @@
-# Copyright 2020; Benjamin O'Brien (iiPython)
+# Copyright 2021; Benjamin O'Brien (iiPython)
 # Under the MIT license, see LICENSE for more information.
 
 # Modules
